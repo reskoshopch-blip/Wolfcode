@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WolfCode – Webdesign aus Feuerthalen | Websites für Schweizer Betriebe</title>
+<meta name="description" content="WolfCode gestaltet und entwickelt Websites für Schweizer Unternehmen, Vereine und lokale Dienstleister. Webdesign aus Feuerthalen: individuell, mobil optimiert, mit Hosting und Domain-Verbindung.">
+<meta name="theme-color" content="#020a18">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_CH">
+<meta property="og:site_name" content="WolfCode">
+<meta property="og:title" content="WolfCode – Websites, die Eindruck machen">
+<meta property="og:description" content="WolfCode gestaltet und entwickelt Websites für Schweizer Unternehmen, Vereine und lokale Dienstleister. Webdesign aus Feuerthalen: individuell, mobil optimiert, mit Hosting und Domain-Verbindung.">
+<meta property="og:image" content="og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preload" as="image" href="wolfcode-logo.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=Albert+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"WolfCode","description":"Webdesign und Entwicklung für Schweizer Unternehmen, Vereine und lokale Dienstleister.","founder":{"@type":"Person","name":"Jonas Bachmann"},"address":{"@type":"PostalAddress","addressLocality":"Feuerthalen","postalCode":"8245","addressCountry":"CH"},"areaServed":"CH"}</script>
+</head>
+<body>
+<style>
+/* Art Direction "Midnight Precision": architektonisches 12er-Raster, Elektroblau (#0695FE aus dem Logo) als einzige Signalfarbe,
+   Chrom nur für Display-Typo und Primär-Button, scharfe Kanten (2px) wie die Splitter im Logo. Bewusst nur ein (dunkles) Theme. */
+:root{
+  color-scheme:dark;
+  --bg:#020a18; --bg-2:#04132e; --bg-3:#071d42;
+  --blue:#0695fe; --blue-hi:#19b9fd; --blue-deep:#0058c9;
+  --silver:#e5ebf3; --silver-2:#bec4d5; --steel:#79808f;
+  --text:#e5ebf3; --muted:#9ba6ba; --error:#ff8a8a;
+  --line:rgba(190,196,213,.12); --line-2:rgba(190,196,213,.24);
+  --surface:rgba(7,29,66,.36); --surface-2:rgba(7,29,66,.62);
+  --chrome:linear-gradient(180deg,#ffffff 0%,#e5ebf3 34%,#aab2c5 49%,#5d6374 54%,#bec4d5 68%,#f3f6fa 100%);
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Albert Sans","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:2px;
+  --shadow:0 40px 80px -40px rgba(0,0,0,.9);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --gutter:clamp(18px,4vw,40px);
+  --max:1240px;
+  --sec:clamp(88px,11vw,150px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+html{overflow-x:clip}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font:400 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--blue-hi);outline-offset:3px}
+.skip{position:fixed;left:16px;top:-60px;z-index:50;background:var(--silver);color:var(--bg);padding:10px 16px;font-weight:600;text-decoration:none;transition:top .2s}
+.skip:focus{top:calc(12px + env(safe-area-inset-top,0px))}
+.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gutter)}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em}
+.chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent}
+.blue{color:var(--blue-hi);text-shadow:0 0 30px rgba(6,149,254,.45)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Atmosphäre: fester Nebel + Sternen-Canvas hinter allem */
+.atmo{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(60vw 50vh at 88% 0%,rgba(6,149,254,.20),transparent 70%),
+    radial-gradient(50vw 60vh at 0% 45%,rgba(0,88,201,.16),transparent 70%),
+    radial-gradient(70vw 50vh at 60% 100%,rgba(6,149,254,.10),transparent 70%),
+    linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 55%,var(--bg) 100%)}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+
+/* Typo-Skala: 12 · 14 · 16 · 17 · 20 · 24 · 32 · clamp(h2) · clamp(h1) */
+.eyebrow{display:flex;align-items:center;gap:12px;font-family:var(--f-mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue-hi)}
+.eyebrow::before{content:"";width:28px;height:1px;background:currentColor}
+h2{font-family:var(--f-display);font-stretch:112%;font-weight:700;font-size:clamp(34px,4.6vw,62px);line-height:1.02;letter-spacing:-.025em;text-wrap:balance}
+h3{font-family:var(--f-display);font-stretch:108%;font-weight:600;font-size:24px;line-height:1.2;letter-spacing:-.01em;text-wrap:balance}
+.lede{font-size:18px;color:var(--muted);max-width:34em}
+.sh{display:grid;grid-template-columns:1.3fr 1fr;gap:28px 64px;align-items:end;margin-bottom:clamp(44px,6vw,72px)}
+.sh>div{display:flex;flex-direction:column;gap:20px;min-width:0}
+section{position:relative;padding-block:var(--sec)}
+.seam{height:1px;max-width:var(--max);margin-inline:auto;background:linear-gradient(90deg,transparent,var(--line-2) 20%,rgba(6,149,254,.6) 50%,var(--line-2) 80%,transparent)}
+
+/* Buttons */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:0 26px;border:1px solid transparent;border-radius:var(--r);font:600 15px/1 var(--f-body);text-decoration:none;cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s var(--ease),background .4s var(--ease),border-color .4s var(--ease),color .4s var(--ease)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:linear-gradient(180deg,#fff 0%,#e5ebf3 45%,#bec4d5 100%);color:var(--bg);box-shadow:0 10px 30px -14px rgba(229,235,243,.55)}
+.btn-primary::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.95) 50%,transparent 65%);transform:translateX(-130%);transition:transform .9s var(--ease)}
+.btn-primary:hover{box-shadow:0 16px 40px -14px rgba(25,185,253,.75)}
+.btn-primary:hover::after{transform:translateX(130%)}
+.btn-ghost{border-color:var(--line-2);color:var(--text);background:rgba(2,10,24,.3)}
+.btn-ghost:hover{border-color:var(--blue);background:rgba(6,149,254,.10);box-shadow:0 0 0 1px rgba(6,149,254,.3),0 16px 40px -20px rgba(6,149,254,.9)}
+.btn-sm{min-height:42px;padding:0 18px;font-size:14px}
+.btn .ar{transition:transform .4s var(--ease)}
+.btn:hover .ar{transform:translateX(4px)}
+.btn .ar.ne{transform:none}
+.btn:hover .ar.ne{transform:translate(3px,-3px)}
+
+/* Kopfzeile */
+.site-header{position:fixed;left:0;right:0;top:0;z-index:20;padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid transparent;transition:background .45s var(--ease),border-color .45s var(--ease),backdrop-filter .45s}
+.site-header.scrolled{background:rgba(2,10,24,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom-color:var(--line)}
+.progress{position:absolute;left:0;bottom:-1px;height:1px;width:100%;background:linear-gradient(90deg,var(--blue-deep),var(--blue),var(--blue-hi));transform:scaleX(0);transform-origin:left}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:76px;transition:height .45s var(--ease)}
+.scrolled .nav{height:64px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.brand img{width:44px;height:39px}
+.wordmark{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:16px;letter-spacing:.06em}
+.wordmark b{font-weight:800;color:var(--blue-hi)}
+.menu{display:flex;align-items:center;gap:6px}
+.menu a:not(.btn){position:relative;padding:10px 14px;font-size:15px;color:var(--muted);text-decoration:none;transition:color .3s var(--ease)}
+.menu a:not(.btn)::after{content:"";position:absolute;left:14px;right:14px;bottom:4px;height:1px;background:var(--blue-hi);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.menu a:not(.btn):hover,.menu a.active{color:var(--silver)}
+.menu a:not(.btn):hover::after,.menu a.active::after{transform:scaleX(1);transform-origin:left}
+.menu .btn{margin-left:14px}
+.burger{display:none;position:relative;width:46px;height:46px;border:1px solid var(--line-2);border-radius:var(--r);background:rgba(2,10,24,.4);cursor:pointer}
+.burger span{position:absolute;left:13px;right:13px;height:1.5px;background:var(--silver);transition:transform .45s var(--ease),opacity .3s}
+.burger span:nth-child(1){top:17px}.burger span:nth-child(2){top:22.5px}.burger span:nth-child(3){top:28px}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+
+/* Mobiles Menü */
+.drawer{position:fixed;inset:0;z-index:19;background:rgba(2,10,24,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:calc(100px + env(safe-area-inset-top,0px)) var(--gutter) calc(32px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;justify-content:space-between;gap:32px;clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .7s var(--ease),visibility 0s .7s}
+.drawer.open{clip-path:inset(0 0 0 0);visibility:visible;transition:clip-path .7s var(--ease),visibility 0s}
+.drawer ul{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.drawer li{border-bottom:1px solid var(--line);opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.drawer.open li{opacity:1;transform:none}
+.drawer.open li:nth-child(2){transition-delay:.05s}.drawer.open li:nth-child(3){transition-delay:.1s}.drawer.open li:nth-child(4){transition-delay:.15s}.drawer.open li:nth-child(5){transition-delay:.2s}
+.drawer li a{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0;text-decoration:none;font-family:var(--f-display);font-stretch:112%;font-weight:600;font-size:clamp(26px,7vw,40px)}
+.drawer li a span{font-family:var(--f-mono);font-size:12px;color:var(--steel);font-weight:400}
+.drawer .btn{width:100%}
+body.locked{overflow:hidden}
+
+/* HERO */
+.hero{position:relative;padding-top:calc(140px + env(safe-area-inset-top,0px));padding-bottom:clamp(70px,9vw,120px);overflow:hidden}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(24px,4vw,64px);align-items:center}
+.hero-copy{display:flex;flex-direction:column;gap:28px;min-width:0}
+.status{display:inline-flex;align-items:center;gap:10px;align-self:flex-start;padding:8px 14px;border:1px solid var(--line-2);background:rgba(2,10,24,.4);color:var(--silver-2);text-transform:uppercase}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--blue-hi);box-shadow:0 0 0 0 rgba(25,185,253,.6);animation:ping 2.4s var(--ease) infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(25,185,253,.6)}80%,100%{box-shadow:0 0 0 10px rgba(25,185,253,0)}}
+h1{font-family:var(--f-display);font-stretch:110%;font-weight:800;font-size:clamp(42px,6.2vw,92px);line-height:.95;letter-spacing:-.035em}
+h1 span{display:block}
+.sub{font-size:clamp(17px,1.5vw,20px);line-height:1.6;color:var(--muted);max-width:31em}
+.sub strong{color:var(--silver);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:12px 36px;padding-top:24px;border-top:1px solid var(--line);color:#fff}
+.hero-meta div{display:flex;flex-direction:column;gap:4px}
+.hero-meta dt{text-transform:uppercase;letter-spacing:.16em;font-size:11px}
+.hero-meta dt{color:#fff;opacity:.7}
+.hero-meta dd{color:#fff;font-size:13px}
+
+/* 3D-Bühne */
+.stage{position:relative;aspect-ratio:1/1;max-width:100%;min-width:0;perspective:1200px}
+.stage-tilt{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s var(--ease)}
+.dial{position:absolute;inset:-2%;width:104%;height:104%;overflow:visible}
+.dial .ticks{fill:none;stroke:rgba(190,196,213,.28);stroke-width:.35;stroke-dasharray:.35 2.1}
+.dial .track{fill:none;stroke:rgba(190,196,213,.10);stroke-width:.3}
+.dial .arc{fill:none;stroke:url(#arcGrad);stroke-width:.7;stroke-linecap:round;stroke-dasharray:70 244}
+.dial .dot{fill:var(--blue-hi);filter:drop-shadow(0 0 2px #19b9fd)}
+.dial-spin{transform-origin:50px 50px;animation:spin 24s linear infinite}
+.dial-spin.rev{animation-duration:60s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.halo{position:absolute;inset:14% 14% 26%;border-radius:50%;background:radial-gradient(closest-side,rgba(6,149,254,.38),rgba(6,149,254,.08) 60%,transparent);filter:blur(10px);animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.65;transform:scale(1)}50%{opacity:1;transform:scale(1.07)}}
+.beam{position:absolute;width:1px;top:-10%;height:120%;background:linear-gradient(180deg,transparent,rgba(25,185,253,.7) 50%,transparent);opacity:.0;animation:beam 7s var(--ease) infinite}
+.beam.b1{left:18%;animation-delay:.8s}.beam.b2{left:82%;animation-delay:3.4s}.beam.b3{left:50%;animation-delay:5.6s}
+@keyframes beam{0%{opacity:0;transform:translateY(-30%)}20%{opacity:.9}50%,100%{opacity:0;transform:translateY(30%)}}
+.logo{position:absolute;left:6%;right:6%;top:7%;width:88%;height:auto;transform:translateZ(60px);filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
+.reflect{position:absolute;left:6%;width:88%;top:calc(7% + 88% * 1040 / 1180 - 2%);height:auto;transform:scaleY(-1);opacity:.16;-webkit-mask-image:linear-gradient(0deg,#000 0%,transparent 38%);mask-image:linear-gradient(0deg,#000 0%,transparent 38%);filter:blur(1.5px);pointer-events:none}
+.floor{position:absolute;left:-30%;right:-30%;bottom:-6%;height:46%;z-index:1;pointer-events:none;perspective:520px;-webkit-mask-image:radial-gradient(60% 100% at 50% 100%,#000 30%,transparent 75%);mask-image:radial-gradient(60% 100% at 50% 100%,#000 30%,transparent 75%)}
+.floor::before{content:"";position:absolute;inset:-40% 0 0;transform:rotateX(74deg);transform-origin:50% 100%;
+  background-image:linear-gradient(rgba(6,149,254,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(6,149,254,.32) 1px,transparent 1px);
+  background-size:64px 64px;animation:floor 4s linear infinite}
+@keyframes floor{to{background-position:0 64px}}
+.scroll-hint{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;text-decoration:none;color:var(--steel);text-transform:uppercase;letter-spacing:.24em;font-size:10px}
+.scroll-hint span{width:1px;height:42px;background:linear-gradient(180deg,var(--blue-hi),transparent);transform-origin:top;animation:hint 2.4s var(--ease) infinite}
+@keyframes hint{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* Zielgruppen */
+.who-list{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 0;margin-bottom:clamp(56px,7vw,88px)}
+.who-list li{font-family:var(--f-display);font-stretch:115%;font-weight:700;font-size:clamp(26px,3.6vw,50px);line-height:1.15;letter-spacing:-.02em;color:#fff;cursor:default;transition:color .45s var(--ease),text-shadow .45s var(--ease)}
+.who-list li:hover{color:var(--silver-2);text-shadow:0 0 24px rgba(190,196,213,.35)}
+.who-list li:not(:last-child)::after{content:"/";margin-inline:.35em;color:var(--blue)}
+.why{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.why li{display:flex;flex-direction:column;gap:14px;padding:36px 32px 0 0;min-width:0}
+.why li+li{padding-left:32px;border-left:1px solid var(--line)}
+.why svg{width:40px;height:40px;stroke:var(--blue-hi);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.why h3{font-size:22px}
+.why p{color:var(--muted);font-size:16px}
+
+/* Leistungen – Bento */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:auto;gap:20px}
+.svc{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,rgba(7,29,66,.55),rgba(2,10,24,.55));padding:clamp(26px,3vw,40px);display:flex;flex-direction:column;gap:16px;min-width:0;transition:border-color .5s var(--ease),transform .5s var(--ease),box-shadow .5s var(--ease)}
+.svc::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(25,185,253,.13),transparent 60%);opacity:0;transition:opacity .5s var(--ease)}
+.svc:hover{border-color:rgba(6,149,254,.45);transform:translateY(-4px);box-shadow:var(--shadow)}
+.svc:hover::before{opacity:1}
+.svc .tag{font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+.svc p{color:var(--muted);font-size:16px;max-width:34em}
+.svc ul{display:flex;flex-direction:column;gap:10px;margin-top:auto;padding-top:20px;border-top:1px solid var(--line)}
+.svc li{position:relative;padding-left:22px;font-size:15px;color:var(--silver-2)}
+.svc li::before{content:"";position:absolute;left:0;top:.72em;width:12px;height:1px;background:var(--blue-hi)}
+.svc-a{grid-column:span 7;grid-row:span 2}
+.svc-b,.svc-c{grid-column:span 5}
+.svc-a h3{font-size:clamp(28px,2.8vw,38px)}
+.art{width:100%;height:auto;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.art .s{stroke:rgba(190,196,213,.45);stroke-width:1}
+.art .b{stroke:var(--blue-hi);stroke-width:1.4}
+.art .f{fill:rgba(6,149,254,.14);stroke:none}
+.art .fs{fill:rgba(190,196,213,.16);stroke:none}
+.icon-art{width:64px;height:64px}
+.incl{grid-column:span 12;display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;padding:22px 26px;border:1px dashed var(--line-2);border-radius:var(--r)}
+.incl .mono{color:#fff;text-transform:uppercase;letter-spacing:.16em;margin-right:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:#fff;padding:8px 14px;border:1px solid var(--line);background:rgba(6,149,254,.06);border-radius:var(--r);transition:color .4s var(--ease),border-color .4s var(--ease)}
+.chip:hover{color:var(--silver-2);border-color:rgba(190,196,213,.4)}
+.chip::before{content:"";width:5px;height:5px;background:var(--blue-hi);transform:rotate(45deg)}
+
+/* Referenz – Fallstudie */
+.case{border:1px solid var(--line-2);border-radius:var(--r);background:linear-gradient(180deg,rgba(7,29,66,.5),rgba(2,10,24,.75));overflow:hidden}
+.case-visual{position:relative;padding:clamp(28px,5vw,72px) clamp(20px,5vw,72px) clamp(56px,7vw,96px);background:
+  radial-gradient(70% 90% at 50% 0%,rgba(6,149,254,.22),transparent 70%),
+  linear-gradient(rgba(190,196,213,.05) 1px,transparent 1px) 0 0/48px 48px,
+  linear-gradient(90deg,rgba(190,196,213,.05) 1px,transparent 1px) 0 0/48px 48px;
+  border-bottom:1px solid var(--line);perspective:1800px}
+.case-label{position:absolute;top:18px;left:clamp(20px,5vw,72px);right:clamp(20px,5vw,72px);display:flex;justify-content:space-between;gap:12px;color:var(--steel);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.mock{position:relative;margin-top:24px;transition:transform 1s var(--ease)}
+.case:hover .mock{transform:rotateX(3deg) rotateY(-5deg) translateY(-6px)}
+.desk{border:1px solid var(--line-2);border-radius:6px;overflow:hidden;background:#040a22;box-shadow:0 60px 100px -40px rgba(0,0,0,.95),0 0 0 1px rgba(0,0,0,.4);width:88%}
+.chrome-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#0a1430;border-bottom:1px solid rgba(255,255,255,.06)}
+.chrome-bar i{width:10px;height:10px;border-radius:50%;background:#2a3554}
+.chrome-bar b{flex:1;max-width:340px;margin-left:12px;padding:5px 12px;border-radius:4px;background:rgba(255,255,255,.06);font:500 12px/1.2 var(--f-body);color:#9aa4b8;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-width:0}
+.phone{position:absolute;right:0;bottom:-34px;width:23%;min-width:120px;border:6px solid #0d1530;border-radius:26px;overflow:hidden;background:#040a22;box-shadow:0 50px 80px -30px rgba(0,0,0,.95),0 0 0 1px var(--line-2);transition:transform 1s var(--ease)}
+.case:hover .phone{transform:translateY(-14px) translateZ(40px)}
+.phone::before{content:"";display:block;width:34%;height:5px;margin:7px auto 0;border-radius:4px;background:#1a2340}
+/* Alien-Wolf-Nachbildung, Grösse über font-size skaliert */
+.aw{font-family:Georgia,"Times New Roman",serif;color:#f1ead8;font-size:clamp(6.5px,.95vw,11.5px);background:
+  radial-gradient(1px 1px at 12% 30%,#fff,transparent),radial-gradient(1px 1px at 28% 72%,#fff,transparent),radial-gradient(1.5px 1.5px at 46% 18%,#cfe3ff,transparent),
+  radial-gradient(1px 1px at 63% 80%,#fff,transparent),radial-gradient(1.5px 1.5px at 80% 34%,#fff,transparent),radial-gradient(1px 1px at 91% 64%,#cfe3ff,transparent),
+  radial-gradient(1px 1px at 36% 48%,#fff,transparent),radial-gradient(1px 1px at 72% 56%,#fff,transparent),
+  radial-gradient(60% 50% at 50% 0%,rgba(40,90,210,.55),transparent 75%),#040a22}
+.aw-nav{display:flex;align-items:center;justify-content:space-between;gap:1em;padding:1.4em 2em;font-family:var(--f-body);font-size:.95em;color:#b9c2d6}
+.aw-brand{display:flex;align-items:center;gap:.7em;font:italic 1.25em/1 Georgia,serif;color:#f1ead8;white-space:nowrap}
+.aw-brand i{display:grid;place-items:center;width:2.4em;height:2.4em;border:1px solid #d9b25a;border-radius:50%;color:#d9b25a;font:700 .7em/1 Georgia,serif;font-style:normal}
+.aw-links{display:flex;gap:1.6em;white-space:nowrap}
+.aw-btn{background:#d9b25a;color:#1a1403;padding:.7em 1.1em;border-radius:2px;font-weight:700;white-space:nowrap}
+.aw-hero{text-align:center;padding:4.2em 2em 4.6em;display:flex;flex-direction:column;align-items:center;gap:1.2em}
+.aw-hero small{font-family:var(--f-body);font-size:.9em;letter-spacing:.3em;text-transform:uppercase;color:#d9b25a}
+.aw-hero strong{font-style:italic;font-weight:400;font-size:5em;line-height:1}
+.aw-hero strong em{color:#d9b25a}
+.aw-hero p{font-family:var(--f-body);font-size:1.15em;color:#c8cfdd}
+.aw-ctas{display:flex;gap:.8em;font-family:var(--f-body);font-size:1em;font-weight:700}
+.aw-ctas span{padding:.9em 1.4em;border-radius:2px}
+.aw-ctas span:first-child{background:#d9b25a;color:#1a1403}
+.aw-ctas span:last-child{border:1px solid rgba(217,178,90,.6)}
+.aw-trust{font-family:var(--f-body);font-size:.95em;color:#c8cfdd}
+.aw-trust b{color:#00b67a;letter-spacing:.1em}
+.aw-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1em;padding:0 2em 2.6em}
+.aw-cards div{border:1px solid rgba(217,178,90,.25);padding:1.3em;font-family:var(--f-body);font-size:.95em;color:#c8cfdd;background:rgba(255,255,255,.02)}
+.aw-cards b{display:block;color:#f1ead8;font-family:Georgia,serif;font-size:1.2em;font-weight:400;margin-bottom:.4em}
+.phone .aw{font-size:clamp(5.5px,.62vw,8px)}
+.phone .aw-nav{padding:1.6em 1.6em}
+.phone .aw-hero{padding:4em 1.6em 5em;gap:1.4em}
+.phone .aw-hero strong{font-size:4.4em}
+.phone .aw-ctas{flex-direction:column;width:100%}
+.phone .aw-lang{display:flex;gap:.9em;justify-content:center;font-family:var(--f-body);font-size:1em;color:#8f98ac;padding-bottom:3em}
+.phone .aw-lang b{color:#d9b25a}
+.case-body{display:grid;grid-template-columns:1.25fr 1fr 1fr;border-bottom:1px solid var(--line)}
+.case-body>div{padding:clamp(26px,3.4vw,44px);display:flex;flex-direction:column;gap:14px;min-width:0}
+.case-body>div+div{border-left:1px solid var(--line)}
+.case-body h3{font-size:clamp(24px,2.4vw,32px)}
+.case-body p{color:var(--muted);font-size:16px}
+.case-body h4{font-family:var(--f-mono);font-size:12px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--blue-hi)}
+.case-body ul{display:flex;flex-direction:column;gap:9px}
+.case-body li{font-size:15px;color:var(--silver-2);padding-left:20px;position:relative}
+.case-body li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--blue-hi)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:10px 18px;font-size:15px}
+.facts dt{color:var(--steel)}
+.facts dd{color:var(--silver-2)}
+.case-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:22px clamp(26px,3.4vw,44px)}
+.case-cta p{color:var(--steel);font-size:14px}
+.case-cta div{display:flex;flex-wrap:wrap;gap:12px}
+.next{margin-top:20px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:clamp(24px,3vw,36px);border:1px dashed var(--line-2);border-radius:var(--r);transition:border-color .5s var(--ease),background .5s var(--ease)}
+.next:hover{border-color:rgba(6,149,254,.55);background:rgba(6,149,254,.05)}
+.next div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.next p{color:var(--muted);font-size:16px}
+
+/* Ablauf */
+.steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);counter-reset:s;border-top:1px solid var(--line-2)}
+.steps::after{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,var(--blue-deep),var(--blue),var(--blue-hi));transform-origin:left}
+.steps li{counter-increment:s;position:relative;display:flex;flex-direction:column;gap:14px;padding:40px 32px 0 0;min-width:0}
+.steps li::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;background:var(--bg);border:1px solid var(--blue-hi);transform:rotate(45deg);z-index:1;transition:background .4s}
+.steps li:hover::before{background:var(--blue-hi);box-shadow:0 0 14px var(--blue)}
+.steps .n{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:56px;line-height:1;letter-spacing:-.03em;color:#fff;transition:color .45s var(--ease)}
+.steps li:hover .n{color:var(--silver-2)}
+.steps .n::before{content:"0" counter(s)}
+.steps h3{font-size:22px}
+.steps p{color:var(--muted);font-size:16px}
+
+/* Über */
+.about{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(36px,6vw,88px);align-items:center}
+.portrait{position:relative;aspect-ratio:4/5;max-width:100%;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;place-items:center;background:
+  radial-gradient(closest-side,rgba(6,149,254,.28),transparent),
+  linear-gradient(rgba(190,196,213,.05) 1px,transparent 1px) 0 0/40px 40px,
+  linear-gradient(90deg,rgba(190,196,213,.05) 1px,transparent 1px) 0 0/40px 40px,
+  linear-gradient(180deg,rgba(7,29,66,.6),rgba(2,10,24,.6))}
+.portrait img{width:84%;height:auto;transition:transform 1.4s var(--ease)}
+.portrait:hover img{transform:scale(1.05)}
+.portrait figcaption{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid var(--line);background:rgba(2,10,24,.65);color:var(--steel);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.about-copy{display:flex;flex-direction:column;gap:22px;min-width:0;max-width:36em}
+.about-copy p{color:var(--muted)}
+.about-copy p strong{color:var(--silver);font-weight:500}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-top:24px;border-top:1px solid var(--line)}
+.values li{display:flex;flex-direction:column;gap:4px;min-width:0}
+.values b{font-family:var(--f-display);font-stretch:110%;font-weight:600;font-size:17px;color:var(--silver)}
+.values span{font-size:14px;color:var(--muted)}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:clamp(32px,6vw,88px);align-items:start}
+.faq-grid .sh{grid-template-columns:1fr;margin-bottom:0;position:sticky;top:110px}
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px 0;font-family:var(--f-display);font-stretch:106%;font-weight:600;font-size:clamp(18px,1.6vw,21px);transition:color .3s var(--ease),padding-left .45s var(--ease)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:#fff;padding-left:8px}
+.faq summary i{position:relative;flex-shrink:0;width:30px;height:30px;border:1px solid var(--line-2);border-radius:50%;transition:transform .45s var(--ease),border-color .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1.5px;background:var(--blue-hi);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg)}
+.faq details[open] summary i{transform:rotate(45deg);border-color:var(--blue)}
+.faq .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.faq details[open] .ans{grid-template-rows:1fr}
+.faq .ans>div{overflow:hidden}
+.faq .ans p{padding:0 54px 26px 0;color:var(--muted)}
+
+/* Kontakt */
+.contact{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(36px,6vw,80px);padding:clamp(28px,5vw,64px);border:1px solid var(--line-2);border-radius:var(--r);background:radial-gradient(80% 70% at 0% 0%,rgba(6,149,254,.20),transparent 70%),linear-gradient(160deg,rgba(7,29,66,.75),rgba(2,10,24,.9))}
+.contact-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.direct{display:flex;flex-direction:column;border-top:1px solid var(--line);margin-top:8px}
+.direct li{display:flex;justify-content:space-between;gap:16px;padding:15px 0;border-bottom:1px solid var(--line);font-size:15px;min-width:0}
+.direct span{color:var(--steel)}
+.direct b,.direct a{font-weight:500;color:var(--silver);text-align:right;overflow-wrap:anywhere;text-decoration:none}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-width:0}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label,.field legend{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-2);padding:0}
+.field label em{font-style:normal;color:var(--blue-hi)}
+.field input,.field textarea{width:100%;min-width:0;padding:14px 16px;font:400 16px/1.4 var(--f-body);color:var(--text);background:rgba(2,10,24,.6);border:1px solid var(--line-2);border-radius:var(--r);transition:border-color .3s var(--ease),box-shadow .3s var(--ease),background .3s}
+.field textarea{min-height:130px;resize:vertical}
+.field input::placeholder,.field textarea::placeholder{color:#5f6778}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:rgba(2,10,24,.85);box-shadow:0 0 0 3px rgba(6,149,254,.22)}
+.field.invalid input,.field.invalid textarea{border-color:var(--error)}
+.err{font-size:13px;color:var(--error);min-height:0}
+fieldset.field{border:0;margin:0;padding:0}
+.opts{position:relative;display:flex;flex-wrap:wrap;gap:8px}
+.opts input{position:absolute;left:0;top:0;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.opts label{font-family:var(--f-body);font-size:14px;letter-spacing:0;text-transform:none;color:var(--silver-2);padding:10px 14px;border:1px solid var(--line-2);border-radius:var(--r);cursor:pointer;transition:all .3s var(--ease)}
+.opts label:hover{border-color:var(--blue)}
+.opts input:checked+label{background:rgba(6,149,254,.16);border-color:var(--blue-hi);color:#fff}
+.opts input:focus-visible+label{outline:2px solid var(--blue-hi);outline-offset:2px}
+.form-foot{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.form-foot p{font-size:13px;color:var(--steel);max-width:26em}
+.result{grid-column:1/-1;display:flex;flex-direction:column;gap:14px;padding:20px;border:1px solid rgba(6,149,254,.45);border-radius:var(--r);background:rgba(6,149,254,.08)}
+.result p{font-size:15px;color:var(--silver)}
+.result pre{margin:0;padding:14px;max-height:220px;overflow:auto;font:400 13px/1.55 var(--f-mono);color:var(--silver-2);background:rgba(2,10,24,.7);border:1px solid var(--line);white-space:pre-wrap;overflow-wrap:anywhere}
+.result .btn{align-self:flex-start}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(28px + env(safe-area-inset-bottom,0px));overflow:hidden}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding-bottom:40px}
+.foot-top>div{display:flex;flex-direction:column;gap:14px;min-width:0}
+.foot-top p{color:var(--muted);font-size:15px;max-width:24em}
+.foot-top h4{font-family:var(--f-mono);font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+.foot-top ul{display:flex;flex-direction:column;gap:8px}
+.foot-top a{text-decoration:none;color:var(--silver-2);font-size:15px;transition:color .3s}
+.foot-top a:hover{color:#fff}
+.giant{font-family:var(--f-display);font-stretch:125%;font-weight:800;font-size:clamp(56px,16vw,230px);line-height:.8;letter-spacing:-.04em;text-align:center;color:#fff;user-select:none;margin-bottom:28px;white-space:nowrap;transition:color .5s var(--ease)}
+.giant:hover{color:var(--silver-2)}
+.giant b{font-weight:800}
+.foot-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:22px;border-top:1px solid var(--line);color:var(--steel);font-size:13px}
+
+/* Bewegung: Startsequenz + Scroll-Reveals (nur mit Unterstützung für scroll-gesteuerte Animationen; sonst sofort sichtbar) */
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes stageIn{from{opacity:0;transform:scale(.92);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes reveal{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes draw{from{stroke-dashoffset:var(--len,600)}to{stroke-dashoffset:0}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes drift{to{transform:translateY(90px)}}
+@media (prefers-reduced-motion:no-preference){
+  .hero-copy>*{animation:rise 1s var(--ease) both}
+  .hero-copy>:nth-child(2){animation-delay:.1s}.hero-copy>:nth-child(3){animation-delay:.22s}.hero-copy>:nth-child(4){animation-delay:.34s}.hero-copy>:nth-child(5){animation-delay:.46s}
+  .stage{animation:stageIn 1.6s var(--ease) .15s both}
+  .scroll-hint{animation:rise 1s var(--ease) 1s both}
+  @supports (animation-timeline:view()){
+    .rv{animation:reveal linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+    .rv.d1{animation-range:entry 6% entry 66%}.rv.d2{animation-range:entry 12% entry 72%}
+    .stage-wrap{animation:drift linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+    .steps::after{animation:grow linear both;animation-timeline:view();animation-range:entry 30% cover 50%}
+    .svc{view-timeline-name:--svc}
+    .svc .art .draw{stroke-dasharray:var(--len,600);animation:draw linear both;animation-timeline:--svc;animation-range:entry 20% cover 45%}
+  }
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Breakpoints: 1080 · 860 · 560 */
+@media (max-width:1080px){
+  .menu a:not(.btn){padding-inline:10px}
+  .svc-a{grid-column:span 12;grid-row:auto}
+  .svc-b,.svc-c{grid-column:span 6}
+  .case-body{grid-template-columns:1fr 1fr}
+  .case-body>div:first-child{grid-column:1/-1}
+  .case-body>div:nth-child(2){border-left:0;border-top:1px solid var(--line)}
+  .case-body>div:nth-child(3){border-top:1px solid var(--line)}
+}
+@media (max-width:860px){
+  .menu{display:none}
+  .burger{display:block}
+  .hero{padding-top:calc(104px + env(safe-area-inset-top,0px))}
+  .hero-inner,.sh,.about,.faq-grid,.contact{grid-template-columns:1fr}
+  .stage-wrap{order:-1;width:min(100%,420px);margin-inline:auto}
+  .scroll-hint{display:none}
+  .why{grid-template-columns:1fr}
+  .why li,.why li+li{padding:28px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .svc-b,.svc-c{grid-column:span 12}
+  .steps{grid-template-columns:1fr 1fr;row-gap:44px}
+  .faq-grid .sh{position:static}
+  .portrait{max-width:420px;aspect-ratio:1/1}
+  .foot-top{grid-template-columns:1fr 1fr}
+  .foot-top>div:first-child{grid-column:1/-1}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .hero-meta{gap:12px 24px}
+  .cta .btn{flex:1 1 100%}
+  .case-body{grid-template-columns:1fr}
+  .case-body>div+div{border-left:0;border-top:1px solid var(--line)}
+  .desk{width:100%}
+  .phone{width:34%;min-width:0;bottom:-40px;right:-4px;border-width:4px;border-radius:18px}
+  .aw-links,.aw-cards,.aw-nav .aw-btn{display:none}
+  .aw-hero strong{font-size:4.2em}
+  .phone .aw-nav .aw-brand{font-size:1.05em}
+  .next{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .form{grid-template-columns:1fr}
+  .values{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr}
+  .case-label span:last-child{display:none}
+}
+</style>
+
+<a class="skip" href="#main">Zum Inhalt springen</a>
+<div class="atmo" aria-hidden="true"></div>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header class="site-header" id="hdr">
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="WolfCode, zur Startseite"><img src="wolfcode-icon.png" alt="" width="136" height="120"><span class="wordmark"><span class="chrome">WOLF</span><b>CODE</b></span></a>
+    <nav class="menu" aria-label="Hauptnavigation">
+      <a href="#leistungen">Leistungen</a>
+      <a href="#referenz">Referenz</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#ueber">Über uns</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary btn-sm" href="#kontakt">Projekt starten</a>
+    </nav>
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span><b class="sr">Menü öffnen</b></button>
+  </div>
+  <div class="progress" id="prog"></div>
+</header>
+
+<div class="drawer" id="drawer" aria-label="Mobiles Menü">
+  <ul>
+    <li><a href="#leistungen">Leistungen <span>Web · Software · Solutions</span></a></li>
+    <li><a href="#referenz">Referenz <span>Alien Wolf 3D Vision</span></a></li>
+    <li><a href="#ablauf">Ablauf <span>4 Schritte</span></a></li>
+    <li><a href="#ueber">Über uns <span>Jonas Bachmann</span></a></li>
+    <li><a href="#faq">FAQ <span>Häufige Fragen</span></a></li>
+  </ul>
+  <a class="btn btn-primary" href="#kontakt">Website-Projekt starten <span class="ar" aria-hidden="true">→</span></a>
+</div>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="h1">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="status mono"><i aria-hidden="true"></i>Offen für neue Projekte</p>
+        <h1 id="h1"><span class="chrome">Websites, die</span><span class="blue">Eindruck machen.</span></h1>
+        <p class="sub">WolfCode gestaltet und entwickelt <strong>Websites für Schweizer Unternehmen, Vereine und lokale Dienstleister</strong>. Individuell entworfen, sauber programmiert und auf jedem Gerät überzeugend.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#kontakt">Website-Projekt starten <span class="ar" aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost" href="#referenz">Unsere Arbeit entdecken</a>
+        </div>
+        <dl class="hero-meta mono">
+          <div><dt>Standort</dt><dd>Feuerthalen, Schweiz</dd></div>
+          <div><dt>Koordinaten</dt><dd>47.69° N · 8.64° E</dd></div>
+          <div><dt>Bereiche</dt><dd>Web · Software · Solutions</dd></div>
+        </dl>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage" id="stage">
+          <div class="floor" aria-hidden="true"></div>
+          <div class="stage-tilt" id="tilt">
+            <div class="halo" aria-hidden="true"></div>
+            <span class="beam b1" aria-hidden="true"></span><span class="beam b2" aria-hidden="true"></span><span class="beam b3" aria-hidden="true"></span>
+            <svg class="dial" viewBox="0 0 100 100" aria-hidden="true">
+              <defs><linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#19b9fd" stop-opacity="0"/><stop offset=".6" stop-color="#19b9fd"/><stop offset="1" stop-color="#e5ebf3"/></linearGradient></defs>
+              <circle class="track" cx="50" cy="50" r="49"/>
+              <g class="dial-spin rev"><circle class="ticks" cx="50" cy="50" r="47"/></g>
+              <g class="dial-spin"><circle class="arc" cx="50" cy="50" r="49"/><circle class="dot" cx="99" cy="50" r=".9"/></g>
+            </svg>
+            <img class="reflect" alt="" width="900" height="793" aria-hidden="true">
+            <img class="logo" src="wolfcode-logo.webp" alt="WolfCode Logo: silberner Wolfskopf mit blau leuchtenden Augen, darunter der Schriftzug WolfCode mit Web, Software, Solutions" width="900" height="793" fetchpriority="high">
+          </div>
+        </div>
+      </div>
+    </div>
+    <a class="scroll-hint mono" href="#fuer-wen">Scrollen<span aria-hidden="true"></span></a>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="fuer-wen" aria-labelledby="h-who">
+    <div class="wrap">
+      <div class="sh rv">
+        <div><p class="eyebrow">Für wen</p><h2 id="h-who" class="chrome">Für Betriebe, die online so überzeugen wollen wie vor Ort.</h2></div>
+        <p class="lede">Ob Garage, Restaurant oder Verein: Eine eigene Website ist für viele Kundinnen und Kunden der erste Eindruck. WolfCode sorgt dafür, dass er stimmt.</p>
+      </div>
+      <ul class="who-list rv" aria-label="Zielgruppen">
+        <li>Garagen</li><li>Handwerk</li><li>Gastronomie</li><li>Vereine</li><li>Praxen &amp; Studios</li><li>Detailhandel</li><li>Lokale Dienstleister</li>
+      </ul>
+      <ul class="why">
+        <li class="rv">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="10"/><path d="M24.5 24.5 34 34"/><path d="M17 12v10M12 17h10"/></svg>
+          <h3>Gefunden werden</h3>
+          <p>Wer einen Betrieb in der Nähe sucht, sucht online. Mit einer eigenen Website erscheinen Sie dort, wo Ihre Kunden schauen.</p>
+        </li>
+        <li class="rv d1">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 5 33 10v9c0 8-5.5 13.5-13 16-7.5-2.5-13-8-13-16v-9z"/><path d="m14 20 4.5 4.5L27 16"/></svg>
+          <h3>Vertrauen gewinnen</h3>
+          <p>Ein gepflegter Auftritt zeigt auf den ersten Blick, dass Ihr Betrieb sorgfältig und seriös arbeitet.</p>
+        </li>
+        <li class="rv d2">
+          <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14"/><path d="M20 11v9l6 4"/></svg>
+          <h3>Rund um die Uhr informieren</h3>
+          <p>Angebot, Öffnungszeiten und Kontakt sind jederzeit abrufbar, auch wenn gerade niemand ans Telefon kann.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="leistungen" aria-labelledby="h-svc">
+    <div class="wrap">
+      <div class="sh rv">
+        <div><p class="eyebrow">Leistungen</p><h2 id="h-svc" class="chrome">Alles, was Ihre Website braucht.</h2></div>
+        <p class="lede">Gestaltung, Technik und Veröffentlichung aus einer Hand. Sie haben einen Ansprechpartner vom ersten Gespräch bis zur fertigen Seite.</p>
+      </div>
+      <div class="bento">
+        <article class="svc svc-a spot rv">
+          <svg class="art" viewBox="0 0 520 250" aria-hidden="true">
+            <rect class="s draw" style="--len:1500" x="1" y="1" width="518" height="248" rx="4"/>
+            <path class="s" d="M1 26h518"/>
+            <circle class="fs" cx="16" cy="13.5" r="4"/><circle class="fs" cx="30" cy="13.5" r="4"/><circle class="fs" cx="44" cy="13.5" r="4"/>
+            <rect class="fs" x="24" y="44" width="70" height="8" rx="2"/>
+            <rect class="fs" x="330" y="44" width="40" height="8" rx="2"/><rect class="fs" x="380" y="44" width="40" height="8" rx="2"/><rect class="f" x="430" y="40" width="66" height="16" rx="2"/>
+            <rect class="f" x="24" y="84" width="230" height="22" rx="2"/>
+            <rect class="fs" x="24" y="114" width="190" height="22" rx="2"/>
+            <rect class="fs" x="24" y="150" width="210" height="6" rx="2"/><rect class="fs" x="24" y="162" width="170" height="6" rx="2"/>
+            <rect class="b draw" style="--len:300" x="24" y="186" width="96" height="28" rx="2"/>
+            <rect class="s" x="130" y="186" width="96" height="28" rx="2"/>
+            <circle class="b draw" style="--len:500" cx="392" cy="148" r="70"/>
+            <circle class="s" cx="392" cy="148" r="52"/>
+            <path class="b draw" style="--len:400" d="M352 168l26-40 22 26 14-16 22 30"/>
+          </svg>
+          <p class="tag">Web</p>
+          <h3>Websites und Redesigns</h3>
+          <p>Neue Auftritte von Grund auf oder die Überarbeitung einer bestehenden Seite. Gestaltet im Stil Ihrer Marke und abgestimmt auf das, was Ihre Kunden suchen.</p>
+          <ul><li>Individuelles Design statt Baukasten</li><li>Optimiert für Smartphone, Tablet und Desktop</li><li>Übernahme und Neuordnung bestehender Inhalte</li><li>Klare Struktur, die zur Kontaktaufnahme führt</li></ul>
+        </article>
+        <article class="svc svc-b spot rv d1">
+          <svg class="art icon-art" viewBox="0 0 64 64" aria-hidden="true">
+            <circle class="b draw" style="--len:200" cx="32" cy="32" r="26"/>
+            <path class="s" d="M6 32h52M32 6c8 7 12 16 12 26s-4 19-12 26c-8-7-12-16-12-26S24 13 32 6z"/>
+          </svg>
+          <p class="tag">Software</p>
+          <h3>Funktionen und Extras</h3>
+          <p>Elemente, die Besucher informieren und überzeugen.</p>
+          <ul><li>Mehrsprachige Seiten mit Umschalter</li><li>Animationen und bewegte Hintergründe</li><li>Bewertungen und Social Media eingebunden</li></ul>
+        </article>
+        <article class="svc svc-c spot rv d2">
+          <svg class="art icon-art" viewBox="0 0 64 64" aria-hidden="true">
+            <rect class="b draw" style="--len:200" x="10" y="10" width="44" height="18" rx="2"/>
+            <rect class="s" x="10" y="36" width="44" height="18" rx="2"/>
+            <circle class="f" cx="19" cy="19" r="3"/><circle class="fs" cx="19" cy="45" r="3"/>
+            <path class="s" d="M30 19h16M30 45h16"/>
+          </svg>
+          <p class="tag">Solutions</p>
+          <h3>Veröffentlichung und Betreuung</h3>
+          <p>Ihre Website geht online, ohne dass Sie sich um Technik kümmern müssen.</p>
+          <ul><li>Hosting und Einrichtung</li><li>Verbindung mit Ihrer bestehenden Domain</li><li>Anpassungen nach dem Start</li></ul>
+        </article>
+        <div class="incl rv">
+          <span class="mono">Bei jedem Projekt</span>
+          <span class="chip">Mobil optimiert</span><span class="chip">Grundlagen für Suchmaschinen</span><span class="chip">Vorschaubild für Social Media</span><span class="chip">Testversion vor dem Entscheid</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="referenz" aria-labelledby="h-ref">
+    <div class="wrap">
+      <div class="sh rv">
+        <div><p class="eyebrow">Referenz</p><h2 id="h-ref" class="chrome">Ausgewählte Arbeit.</h2></div>
+        <p class="lede">Ein umgesetztes Kundenprojekt, von der Gestaltung bis zur Verbindung mit der Domain des Kunden.</p>
+      </div>
+      <article class="case rv">
+        <div class="case-visual">
+          <div class="case-label mono"><span>Kundenprojekt · 2026</span><span>Nachgebildete Darstellung der Live-Seite</span></div>
+          <div class="mock">
+            <div class="desk" aria-hidden="true">
+              <div class="chrome-bar"><i></i><i></i><i></i><b>alienwolf3dvision.com</b></div>
+              <div class="aw">
+                <div class="aw-nav"><span class="aw-brand"><i>AW</i>Alien Wolf 3D Vision</span><span class="aw-links"><span>Reviews</span><span>Premium Group</span><span>How Signals Work</span><span>About</span><span>FAQ</span></span><span class="aw-btn">Join Premium</span></div>
+                <div class="aw-hero">
+                  <small>W.W.W · Worldwide Winning Wolves</small>
+                  <strong>Trade with <em>character.</em></strong>
+                  <p>See the market before the market sees you</p>
+                  <div class="aw-ctas"><span>Join the Premium Channel</span><span>Free public channel</span></div>
+                  <span class="aw-trust"><b>★★★★★</b> 4.9 on Trustpilot</span>
+                </div>
+                <div class="aw-cards"><div><b>First-hand signals</b>Entry, stop loss and targets in real time.</div><div><b>Risk management</b>Rules to survive a volatile market.</div><div><b>Fundamental analysis</b>Support the technical view.</div></div>
+              </div>
+            </div>
+            <div class="phone" aria-hidden="true">
+              <div class="aw">
+                <div class="aw-nav"><span class="aw-brand"><i>AW</i>Alien Wolf</span></div>
+                <div class="aw-hero">
+                  <small>Worldwide Winning Wolves</small>
+                  <strong>Trade with <em>character.</em></strong>
+                  <div class="aw-ctas"><span>Join Premium</span><span>Free channel</span></div>
+                </div>
+                <div class="aw-lang"><b>EN</b><span>DE</span><span>FR</span><span>AR</span><span>ES</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="case-body">
+          <div>
+            <h4>Projekt</h4>
+            <h3>Alien Wolf 3D Vision</h3>
+            <p>Komplettes Redesign für einen internationalen Anbieter von Forex-Signalen und Trading-Mentoring, der seit 2005 am Markt ist. Die bisherige Seite wirkte überladen. Ziel war ein klarer, moderner Auftritt, auf dem sich Besucher gründlich informieren können.</p>
+          </div>
+          <div>
+            <h4>Leistungen</h4>
+            <ul><li>Neues Design und Umsetzung</li><li>Übernahme aller Inhalte</li><li>Sprachumschalter in fünf Sprachen</li><li>Einbindung der Trustpilot-Bewertungen</li><li>Hosting und Domain-Verbindung</li></ul>
+          </div>
+          <div>
+            <h4>Details</h4>
+            <dl class="facts"><dt>Branche</dt><dd>Forex-Signale</dd><dt>Sprachen</dt><dd>DE, EN, FR, AR, ES</dd><dt>Kunde</dt><dd>International</dd><dt>Status</dt><dd>Online</dd></dl>
+          </div>
+        </div>
+        <div class="case-cta">
+          <p>Die Live-Seite öffnet sich in einem neuen Tab.</p>
+          <div>
+            <a class="btn btn-ghost" href="https://alienwolf3dvision.com" target="_blank" rel="noopener">Live-Seite ansehen <span class="ar ne" aria-hidden="true">↗</span></a>
+            <a class="btn btn-primary" href="#kontakt" data-project="Neue Website">Ähnliches Projekt anfragen <span class="ar" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </article>
+      <a class="next rv" href="#kontakt" style="text-decoration:none">
+        <div><h3>Die nächste Referenz könnte Ihr Betrieb sein.</h3><p>Erzählen Sie, was Sie vorhaben. Sie sehen eine Testversion, bevor Sie sich entscheiden.</p></div>
+        <span class="btn btn-ghost" aria-hidden="true">Projekt besprechen <span class="ar">→</span></span>
+      </a>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="ablauf" aria-labelledby="h-steps">
+    <div class="wrap">
+      <div class="sh rv">
+        <div><p class="eyebrow">Ablauf</p><h2 id="h-steps" class="chrome">Vier Schritte zur neuen Website.</h2></div>
+        <p class="lede">Sie sehen eine Testversion Ihrer Seite, bevor Sie sich festlegen. Erst wenn sie Ihnen gefällt, geht es weiter.</p>
+      </div>
+      <ol class="steps">
+        <li class="rv"><span class="n" aria-hidden="true"></span><h3>Erstgespräch</h3><p>Wir besprechen Ihren Betrieb, Ihre Kunden und was die Website leisten soll. Gerne auch persönlich vor Ort.</p></li>
+        <li class="rv d1"><span class="n" aria-hidden="true"></span><h3>Testversion</h3><p>Sie erhalten einen ersten Entwurf, den Sie in Ruhe auf Handy und Computer prüfen.</p></li>
+        <li class="rv d2"><span class="n" aria-hidden="true"></span><h3>Feinschliff</h3><p>Ihre Rückmeldungen fliessen ein, bis Design, Texte und Bilder stimmen.</p></li>
+        <li class="rv"><span class="n" aria-hidden="true"></span><h3>Veröffentlichung</h3><p>Die Website geht unter Ihrer Domain online. Für Änderungen bleibe ich erreichbar.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="ueber" aria-labelledby="h-about">
+    <div class="wrap about">
+      <figure class="portrait rv">
+        <img src="wolfcode-wolf.webp" alt="" width="560" height="492" loading="lazy">
+        <figcaption class="mono"><span>WolfCode</span><span>Feuerthalen · CH</span></figcaption>
+      </figure>
+      <div class="about-copy rv d1">
+        <p class="eyebrow">Über uns</p>
+        <h2 id="h-about" class="chrome">Ein Ansprechpartner. Kurze Wege.</h2>
+        <p><strong>Ich bin Jonas Bachmann, 19 Jahre alt, und habe WolfCode gegründet</strong>, um Betrieben in der Region zu einem modernen Webauftritt zu verhelfen.</p>
+        <p>Bei WolfCode sprechen Sie direkt mit der Person, die Ihre Website gestaltet und programmiert. Keine Zwischenstellen, schnelle Antworten und eine Seite, die genau auf Ihren Betrieb zugeschnitten ist.</p>
+        <ul class="values">
+          <li><b>Persönlich</b><span>Direkter Kontakt statt Ticketsystem</span></li>
+          <li><b>Individuell</b><span>Jede Seite wird neu entworfen</span></li>
+          <li><b>Transparent</b><span>Erst Testversion, dann Entscheid</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="seam" aria-hidden="true"></div>
+
+  <section id="faq" aria-labelledby="h-faq">
+    <div class="wrap faq-grid">
+      <div class="sh rv">
+        <div><p class="eyebrow">Häufige Fragen</p><h2 id="h-faq" class="chrome">Gut zu wissen.</h2><p class="lede">Ihre Frage ist nicht dabei? Schreiben Sie einfach über das Anfrageformular.</p></div>
+      </div>
+      <div class="faq">
+        <details class="rv"><summary>Was kostet eine Website?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Das hängt vom Umfang ab, zum Beispiel von der Anzahl Seiten, Sprachen und Funktionen. Nach dem Erstgespräch erhalten Sie ein klares Angebot.</p></div></div></details>
+        <details class="rv"><summary>Brauche ich technisches Wissen?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Nein. WolfCode übernimmt Hosting, Einrichtung und die Verbindung mit Ihrer Domain. Sie liefern Inhalte und Wünsche, den Rest erledige ich.</p></div></div></details>
+        <details class="rv"><summary>Kann ich meine bestehende Domain behalten?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Ja. Ihre Domain bleibt bei Ihrem bisherigen Anbieter registriert und wird mit der neuen Website verbunden.</p></div></div></details>
+        <details class="rv"><summary>Muss ich mich sofort festlegen?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Nein. Sie sehen zuerst eine Testversion Ihrer Website und entscheiden danach, ob Sie weitermachen möchten.</p></div></div></details>
+        <details class="rv"><summary>Ist die Website auch für Vereine geeignet?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Ja. Ob Verein, Einzelunternehmen oder kleiner Betrieb: Umfang und Aufbau werden an Ihre Bedürfnisse angepasst.</p></div></div></details>
+        <details class="rv"><summary>Sind spätere Änderungen möglich?<i aria-hidden="true"></i></summary><div class="ans"><div><p>Ja. Neue Texte, Bilder oder Angebote können auch nach dem Start eingepflegt werden.</p></div></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" aria-labelledby="h-contact">
+    <div class="wrap">
+      <div class="contact rv">
+        <div class="contact-copy">
+          <p class="eyebrow">Kontakt</p>
+          <h2 id="h-contact" class="chrome">Starten wir Ihr Website-Projekt.</h2>
+          <p class="lede">Beschreiben Sie kurz Ihr Vorhaben. Sie erhalten eine persönliche Rückmeldung und auf Wunsch eine unverbindliche Testversion.</p>
+          <ul class="direct" id="direct">
+            <li><span>Ansprechpartner</span><b>Jonas Bachmann</b></li>
+            <li><span>Standort</span><b>Feuerthalen, Schweiz</b></li>
+          </ul>
+        </div>
+        <form class="form" id="form" novalidate>
+          <div class="field" id="f-name"><label for="name">Name <em>*</em></label><input id="name" name="name" type="text" autocomplete="name" placeholder="Vor- und Nachname" required><span class="err" id="e-name"></span></div>
+          <div class="field"><label for="company">Betrieb oder Verein</label><input id="company" name="company" type="text" autocomplete="organization" placeholder="z. B. Garage Muster"></div>
+          <div class="field" id="f-email"><label for="email">E-Mail <em>*</em></label><input id="email" name="email" type="email" autocomplete="email" placeholder="name@betrieb.ch" required><span class="err" id="e-email"></span></div>
+          <div class="field"><label for="phone">Telefon</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional"></div>
+          <fieldset class="field full">
+            <legend>Worum geht es?</legend>
+            <div class="opts">
+              <input type="radio" name="type" id="t1" value="Neue Website" checked><label for="t1">Neue Website</label>
+              <input type="radio" name="type" id="t2" value="Redesign"><label for="t2">Redesign</label>
+              <input type="radio" name="type" id="t3" value="Funktionen und Extras"><label for="t3">Funktionen</label>
+              <input type="radio" name="type" id="t4" value="Noch unklar"><label for="t4">Noch unklar</label>
+            </div>
+          </fieldset>
+          <div class="field full" id="f-msg"><label for="msg">Ihre Nachricht <em>*</em></label><textarea id="msg" name="msg" placeholder="Was macht Ihr Betrieb, und was soll die Website können?" required></textarea><span class="err" id="e-msg"></span></div>
+          <div class="form-foot">
+            <p>Felder mit * sind erforderlich. Ihre Angaben werden nur für die Beantwortung Ihrer Anfrage verwendet.</p>
+            <button class="btn btn-primary" type="submit">Anfrage senden <span class="ar" aria-hidden="true">→</span></button>
+          </div>
+          <div class="result" id="result" hidden role="status" aria-live="polite">
+            <p id="resultText"></p>
+            <pre id="resultMsg"></pre>
+            <button class="btn btn-ghost btn-sm" type="button" id="copyBtn">Anfrage kopieren</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <a class="brand" href="#top"><img class="foot-icon" alt="" width="136" height="120"><span class="wordmark"><span class="chrome">WOLF</span><b>CODE</b></span></a>
+        <p>Webdesign und Entwicklung für Schweizer Unternehmen, Vereine und lokale Dienstleister.</p>
+      </div>
+      <div><h4>Seite</h4><ul><li><a href="#leistungen">Leistungen</a></li><li><a href="#referenz">Referenz</a></li><li><a href="#ablauf">Ablauf</a></li><li><a href="#faq">FAQ</a></li></ul></div>
+      <div><h4>Kontakt</h4><ul><li><a href="#kontakt">Anfrage stellen</a></li><li><span style="color:var(--silver-2);font-size:15px">Feuerthalen, Schweiz</span></li></ul></div>
+    </div>
+    <p class="giant" aria-hidden="true">WOLF<b>CODE</b></p>
+    <div class="foot-bottom"><span>© <span id="year">2026</span> WolfCode · Jonas Bachmann</span><span>Web | Software | Solutions</span></div>
+  </div>
+</footer>
+
+<script>
+/* Kontaktangaben hier eintragen. Leer = wird nicht angezeigt. */
+var CONTACT = { email: "", phone: "" };
+
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia('(pointer: fine)').matches;
+
+  /* Sternenhimmel mit Parallax */
+  var c=document.getElementById('sky'),x=c.getContext('2d'),W,H,D,stars=[],shot=null,last=0,nextShot=5000;
+  function g(){return (Math.random()+Math.random()+Math.random()-1.5)/1.5}
+  function build(){
+    D=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;
+    c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0);stars=[];
+    var n=Math.min(W<700?420:1000,Math.round(W*H/1800));
+    for(var i=0;i<n;i++){
+      var band=i<n*.4,px,py;
+      if(band){var t=Math.random();px=t*W+g()*W*.12;py=(.9-t*.8)*H+g()*H*.18}else{px=Math.random()*W;py=Math.random()*H}
+      var big=Math.random()<.045;
+      stars.push({x:px,y:py,r:big?1.1+Math.random()*.8:.35+Math.random()*.6,a:big?.9:.3+Math.random()*.45,s:.3+Math.random()*1.1,p:Math.random()*6.28,d:.02+Math.random()*.09,k:Math.random()<.3?'110,200,255':(Math.random()<.2?'229,235,243':'255,255,255')});
+    }
+  }
+  function draw(now){
+    x.clearRect(0,0,W,H);var sy=window.scrollY||0,t=now/1000;
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i],y=((s.y-sy*s.d)%H+H)%H,a=reduce?s.a:s.a*(.7+.3*Math.sin(t*s.s+s.p));
+      x.fillStyle='rgba('+s.k+','+a.toFixed(3)+')';
+      if(s.r<.9)x.fillRect(s.x,y,s.r*1.5,s.r*1.5);
+      else{x.beginPath();x.arc(s.x,y,s.r,0,6.283);x.fill();x.fillStyle='rgba('+s.k+','+(a*.12).toFixed(3)+')';x.beginPath();x.arc(s.x,y,s.r*3,0,6.283);x.fill()}
+    }
+    if(shot){shot.l+=.02;var hx=shot.x+shot.vx*shot.l,hy=shot.y+shot.vy*shot.l,o=Math.sin(Math.min(shot.l,1)*3.1416)*.8;
+      var gr=x.createLinearGradient(hx,hy,hx-shot.vx*.2,hy-shot.vy*.2);gr.addColorStop(0,'rgba(229,235,243,'+o+')');gr.addColorStop(1,'rgba(25,185,253,0)');
+      x.strokeStyle=gr;x.lineWidth=1.3;x.beginPath();x.moveTo(hx,hy);x.lineTo(hx-shot.vx*.2,hy-shot.vy*.2);x.stroke();if(shot.l>=1)shot=null}
+  }
+  function loop(now){if(now-last>40){if(!shot&&now>nextShot){shot={x:Math.random()*W*.7,y:Math.random()*H*.3,vx:W*.38,vy:H*.26,l:0};nextShot=now+9000+Math.random()*9000}draw(now);last=now}requestAnimationFrame(loop)}
+  build();
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){build();if(reduce)draw(0)},150)});
+  if(reduce){draw(0);window.addEventListener('scroll',function(){draw(0)},{passive:true})}else requestAnimationFrame(loop);
+
+  /* Kopfzeile, Fortschritt, aktiver Abschnitt */
+  var hdr=document.getElementById('hdr'),prog=document.getElementById('prog');
+  var links=[].slice.call(document.querySelectorAll('.menu a[href^="#"]:not(.btn)'));
+  var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  var ticking=false;
+  function onScroll(){
+    ticking=false;var y=window.scrollY||0,max=document.documentElement.scrollHeight-window.innerHeight;
+    hdr.classList.toggle('scrolled',y>16);
+    prog.style.transform='scaleX('+(max>0?Math.min(1,y/max):0)+')';
+    var cur=-1;for(var i=0;i<secs.length;i++){if(secs[i]&&secs[i].getBoundingClientRect().top<window.innerHeight*.4)cur=i}
+    links.forEach(function(a,i){a.classList.toggle('active',i===cur);if(i===cur)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')});
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+  onScroll();
+
+  /* Mobiles Menü */
+  var burger=document.getElementById('burger'),drawer=document.getElementById('drawer'),label=burger.querySelector('.sr');
+  function setMenu(open){
+    burger.setAttribute('aria-expanded',open);drawer.classList.toggle('open',open);document.body.classList.toggle('locked',open);
+    label.textContent=open?'Menü schliessen':'Menü öffnen';
+    if(open){hdr.classList.add('scrolled');var f=drawer.querySelector('a');setTimeout(function(){f&&f.focus()},250)}else onScroll();
+  }
+  burger.addEventListener('click',function(){setMenu(burger.getAttribute('aria-expanded')!=='true')});
+  drawer.addEventListener('click',function(e){if(e.target.closest('a'))setMenu(false)});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&drawer.classList.contains('open')){setMenu(false);burger.focus()}});
+  window.addEventListener('resize',function(){if(window.innerWidth>860&&drawer.classList.contains('open'))setMenu(false)});
+
+  /* 3D-Neigung der Logo-Bühne */
+  var stage=document.getElementById('stage'),tilt=document.getElementById('tilt');
+  if(fine&&!reduce){
+    stage.addEventListener('pointermove',function(e){var r=stage.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;tilt.style.transform='rotateY('+(px*10).toFixed(2)+'deg) rotateX('+(-py*8).toFixed(2)+'deg)'});
+    stage.addEventListener('pointerleave',function(){tilt.style.transform=''});
+  }
+
+  /* Lichtreflex auf Leistungskarten */
+  if(fine)[].forEach.call(document.querySelectorAll('.spot'),function(el){
+    el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')});
+  });
+
+  /* Projekttyp aus CTA übernehmen */
+  [].forEach.call(document.querySelectorAll('[data-project]'),function(a){a.addEventListener('click',function(){var v=a.getAttribute('data-project');[].forEach.call(document.querySelectorAll('input[name="type"]'),function(r){r.checked=r.value===v})})});
+
+  /* Direkte Kontaktangaben einblenden, falls hinterlegt */
+  var direct=document.getElementById('direct');
+  function row(lbl,val,href){var li=document.createElement('li');var s=document.createElement('span');s.textContent=lbl;var v=document.createElement(href?'a':'b');v.textContent=val;if(href)v.href=href;li.appendChild(s);li.appendChild(v);direct.insertBefore(li,direct.firstChild)}
+  if(CONTACT.phone)row('Telefon',CONTACT.phone,'tel:'+CONTACT.phone.replace(/[^+\d]/g,''));
+  if(CONTACT.email)row('E-Mail',CONTACT.email,'mailto:'+CONTACT.email);
+
+  /* Anfrageformular */
+  var form=document.getElementById('form'),res=document.getElementById('result'),resText=document.getElementById('resultText'),resMsg=document.getElementById('resultMsg');
+  function setErr(id,msg){var f=document.getElementById('f-'+id),e=document.getElementById('e-'+id);f.classList.toggle('invalid',!!msg);e.textContent=msg||'';document.getElementById(id==='msg'?'msg':id).setAttribute('aria-invalid',msg?'true':'false')}
+  form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var d={name:form.name.value.trim(),company:form.company.value.trim(),email:form.email.value.trim(),phone:form.phone.value.trim(),type:(form.querySelector('input[name="type"]:checked')||{}).value||'',msg:form.msg.value.trim()};
+    var ok=true;
+    setErr('name',d.name?'':'Bitte geben Sie Ihren Namen an.');if(!d.name)ok=false;
+    var em=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);setErr('email',em?'':'Bitte geben Sie eine gültige E-Mail-Adresse an.');if(!em)ok=false;
+    setErr('msg',d.msg?'':'Bitte beschreiben Sie kurz Ihr Vorhaben.');if(!d.msg)ok=false;
+    if(!ok){var first=form.querySelector('.invalid input,.invalid textarea');first&&first.focus();return}
+    var text='Website-Anfrage über wolfcode\n\nName: '+d.name+(d.company?'\nBetrieb: '+d.company:'')+'\nE-Mail: '+d.email+(d.phone?'\nTelefon: '+d.phone:'')+'\nProjekt: '+d.type+'\n\nNachricht:\n'+d.msg;
+    resMsg.textContent=text;res.hidden=false;
+    if(CONTACT.email){
+      resText.textContent='Ihr E-Mail-Programm öffnet sich mit der vorbereiteten Anfrage. Falls nicht, kopieren Sie den Text und senden Sie ihn an '+CONTACT.email+'.';
+      window.location.href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Website-Anfrage: '+(d.company||d.name))+'&body='+encodeURIComponent(text);
+    }else{
+      resText.textContent='Ihre Anfrage ist vorbereitet. Die direkte Kontaktadresse wird in Kürze ergänzt. Kopieren Sie den Text, damit nichts verloren geht.';
+    }
+    res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});
+  });
+  ['name','email','msg'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){document.getElementById('f-'+id).classList.remove('invalid');document.getElementById('e-'+id).textContent=''})});
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var b=this,t=resMsg.textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(resMsg);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Text markiert, bitte kopieren'}
+    try{navigator.clipboard.writeText(t).then(function(){b.textContent='Kopiert'},sel)}catch(e){sel()}
+  });
+
+  var lg=document.querySelector('.logo');document.querySelector('.reflect').src=lg.getAttribute('src');document.querySelector('.foot-icon').src=document.querySelector('.brand img').getAttribute('src');
+  document.getElementById('year').textContent=new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
