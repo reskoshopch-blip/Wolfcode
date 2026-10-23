@@ -741,7 +741,7 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_next" id="h-next" value="">
           <input type="hidden" name="_autoresponse" value="Vielen Dank für Ihre Anfrage bei WolfCode! Ich habe Ihre Nachricht erhalten und melde mich so bald wie möglich persönlich bei Ihnen. Unten finden Sie eine Kopie Ihrer Angaben. Freundliche Grüsse, Jonas Bachmann, WolfCode, Feuerthalen">
-          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <input type="text" name="_honey" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <div class="field" id="f-name"><label for="name">Name <em>*</em></label><input id="name" name="Name" type="text" autocomplete="name" placeholder="Vor- und Nachname" required><span class="err" id="e-name"></span></div>
           <div class="field"><label for="company">Betrieb oder Verein</label><input id="company" name="Betrieb" type="text" autocomplete="organization" placeholder="z. B. Garage Muster"></div>
           <div class="field" id="f-email"><label for="email">E-Mail <em>*</em></label><input id="email" name="email" type="email" autocomplete="email" placeholder="name@betrieb.ch" required><span class="err" id="e-email"></span></div>
@@ -801,7 +801,9 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
 /* ==== HIER DEINE E-MAIL-ADRESSE EINTRAGEN ====
    An diese Adresse gehen alle Anfragen; der Kunde bekommt automatisch eine Bestätigung.
    Beim ersten Absenden schickt FormSubmit dir einmalig eine Mail mit "Activate Form" – dort klicken. */
-var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "" };
+var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "",
+  /* Web-App-URL des Google-Skripts (script.google.com/macros/s/…/exec). Leer = Versand über FormSubmit. */
+  endpoint: "https://script.google.com/macros/s/AKfycbwyj8oKYd1byhoJE5tk65KtuC4uZgtsmFXXPq0fFaVHpSuETW_55mxsYWdPB165WJ_z/exec" };
 
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -898,6 +900,20 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "" };
     var em=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);setErr('email',em?'':'Bitte geben Sie eine gültige E-Mail-Adresse an.');if(!em)ok=false;
     setErr('msg',d.msg?'':'Bitte beschreiben Sie kurz Ihr Vorhaben.');if(!d.msg)ok=false;
     if(!ok){ev.preventDefault();var first=form.querySelector('.invalid input,.invalid textarea');first&&first.focus();return}
+    if(CONTACT.endpoint){
+      ev.preventDefault();
+      var btn=form.querySelector('button[type=submit]'),lbl=btn.firstChild.textContent;
+      btn.disabled=true;btn.firstChild.textContent='Wird gesendet … ';res.hidden=true;
+      var restore=function(){btn.disabled=false;btn.firstChild.textContent=lbl};
+      var fail=function(m){restore();resMsg.hidden=true;copyBtn.hidden=true;res.hidden=false;
+        resText.textContent=m||('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es nochmals oder schreiben Sie direkt an '+CONTACT.email+'.');
+        res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})};
+      fetch(CONTACT.endpoint,{method:'POST',body:JSON.stringify({name:d.name,company:d.company,email:d.email,phone:d.phone,type:d.type,message:d.msg,website:$('hp').value})})
+        .then(function(x){return x.json()})
+        .then(function(j){if(j&&j.ok){restore();form.reset();showThanks()}else fail(j&&j.error==='invalid'?'Bitte prüfen Sie Ihre Angaben.':null)})
+        .catch(function(){fail()});
+      return;
+    }
     if(CONTACT.email){
       $('h-subject').value='Neue Website-Anfrage: '+(d.company||d.name);
       $('h-next').value=location.href.split('#')[0]+'#danke';
@@ -913,10 +929,11 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "" };
   /* Rückkehr nach erfolgreichem Versand: Danke-Bildschirm */
   var th=$('thanks');
   function closeThanks(){th.hidden=true;document.body.classList.remove('locked');try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
-  if(location.hash==='#danke'){
+  function showThanks(){
     th.querySelector('.thanks-logo').src=document.querySelector('.portrait img').getAttribute('src');
     th.hidden=false;document.body.classList.add('locked');setTimeout(function(){$('thanksClose').focus()},100);
   }
+  if(location.hash==='#danke')showThanks();
   $('thanksClose').addEventListener('click',closeThanks);
   th.addEventListener('click',function(e){if(e.target===th)closeThanks()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!th.hidden)closeThanks()});
