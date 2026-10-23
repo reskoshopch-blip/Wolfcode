@@ -47,6 +47,7 @@
   --sec:clamp(88px,11vw,150px);
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:80px}
 html{overflow-x:clip}
 body{margin:0;overflow-x:clip;background:var(--bg);color:var(--text);font:400 17px/1.65 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
@@ -746,21 +747,26 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
             <li><span>Standort</span><b>Feuerthalen, Schweiz</b></li>
           </ul>
         </div>
-        <form class="form" id="form" novalidate>
-          <div class="field" id="f-name"><label for="name">Name <em>*</em></label><input id="name" name="name" type="text" autocomplete="name" placeholder="Vor- und Nachname" required><span class="err" id="e-name"></span></div>
-          <div class="field"><label for="company">Betrieb oder Verein</label><input id="company" name="company" type="text" autocomplete="organization" placeholder="z. B. Garage Muster"></div>
+        <form class="form" id="form" method="POST" novalidate>
+          <input type="hidden" name="_subject" id="h-subject" value="Neue Website-Anfrage über WolfCode">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_next" id="h-next" value="">
+          <input type="hidden" name="_autoresponse" value="Vielen Dank für Ihre Anfrage bei WolfCode! Ich habe Ihre Nachricht erhalten und melde mich so bald wie möglich persönlich bei Ihnen. Unten finden Sie eine Kopie Ihrer Angaben. Freundliche Grüsse, Jonas Bachmann, WolfCode, Feuerthalen">
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <div class="field" id="f-name"><label for="name">Name <em>*</em></label><input id="name" name="Name" type="text" autocomplete="name" placeholder="Vor- und Nachname" required><span class="err" id="e-name"></span></div>
+          <div class="field"><label for="company">Betrieb oder Verein</label><input id="company" name="Betrieb" type="text" autocomplete="organization" placeholder="z. B. Garage Muster"></div>
           <div class="field" id="f-email"><label for="email">E-Mail <em>*</em></label><input id="email" name="email" type="email" autocomplete="email" placeholder="name@betrieb.ch" required><span class="err" id="e-email"></span></div>
-          <div class="field"><label for="phone">Telefon</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional"></div>
+          <div class="field"><label for="phone">Telefon</label><input id="phone" name="Telefon" type="tel" autocomplete="tel" placeholder="Optional"></div>
           <fieldset class="field full">
             <legend>Worum geht es?</legend>
             <div class="opts">
-              <input type="radio" name="type" id="t1" value="Neue Website" checked><label for="t1">Neue Website</label>
-              <input type="radio" name="type" id="t2" value="Redesign"><label for="t2">Redesign</label>
-              <input type="radio" name="type" id="t3" value="Funktionen und Extras"><label for="t3">Funktionen</label>
-              <input type="radio" name="type" id="t4" value="Noch unklar"><label for="t4">Noch unklar</label>
+              <input type="radio" name="Projekt" id="t1" value="Neue Website" checked><label for="t1">Neue Website</label>
+              <input type="radio" name="Projekt" id="t2" value="Redesign"><label for="t2">Redesign</label>
+              <input type="radio" name="Projekt" id="t3" value="Funktionen und Extras"><label for="t3">Funktionen</label>
+              <input type="radio" name="Projekt" id="t4" value="Noch unklar"><label for="t4">Noch unklar</label>
             </div>
           </fieldset>
-          <div class="field full" id="f-msg"><label for="msg">Ihre Nachricht <em>*</em></label><textarea id="msg" name="msg" placeholder="Was macht Ihr Betrieb, und was soll die Website können?" required></textarea><span class="err" id="e-msg"></span></div>
+          <div class="field full" id="f-msg"><label for="msg">Ihre Nachricht <em>*</em></label><textarea id="msg" name="Nachricht" placeholder="Was macht Ihr Betrieb, und was soll die Website können?" required></textarea><span class="err" id="e-msg"></span></div>
           <div class="form-foot">
             <p>Felder mit * sind erforderlich. Ihre Angaben werden nur für die Beantwortung Ihrer Anfrage verwendet.</p>
             <button class="btn btn-primary" type="submit">Anfrage senden <span class="ar" aria-hidden="true">→</span></button>
@@ -793,7 +799,10 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
 
 <script>
 /* Kontaktangaben hier eintragen. Leer = wird nicht angezeigt. */
-var CONTACT = { email: "", phone: "" };
+/* ==== HIER DEINE E-MAIL-ADRESSE EINTRAGEN ====
+   An diese Adresse gehen alle Anfragen; der Kunde bekommt automatisch eine Bestätigung.
+   Beim ersten Absenden schickt FormSubmit dir einmalig eine Mail mit "Activate Form" – dort klicken. */
+var CONTACT = { email: "info@wolfcodeweb.com", phone: "" };
 
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -870,7 +879,7 @@ var CONTACT = { email: "", phone: "" };
   });
 
   /* Projekttyp aus CTA übernehmen */
-  [].forEach.call(document.querySelectorAll('[data-project]'),function(a){a.addEventListener('click',function(){var v=a.getAttribute('data-project');[].forEach.call(document.querySelectorAll('input[name="type"]'),function(r){r.checked=r.value===v})})});
+  [].forEach.call(document.querySelectorAll('[data-project]'),function(a){a.addEventListener('click',function(){var v=a.getAttribute('data-project');[].forEach.call(document.querySelectorAll('input[name="Projekt"]'),function(r){r.checked=r.value===v})})});
 
   /* Direkte Kontaktangaben einblenden, falls hinterlegt */
   var direct=document.getElementById('direct');
@@ -878,28 +887,37 @@ var CONTACT = { email: "", phone: "" };
   if(CONTACT.phone)row('Telefon',CONTACT.phone,'tel:'+CONTACT.phone.replace(/[^+\d]/g,''));
   if(CONTACT.email)row('E-Mail',CONTACT.email,'mailto:'+CONTACT.email);
 
-  /* Anfrageformular */
-  var form=document.getElementById('form'),res=document.getElementById('result'),resText=document.getElementById('resultText'),resMsg=document.getElementById('resultMsg');
-  function setErr(id,msg){var f=document.getElementById('f-'+id),e=document.getElementById('e-'+id);f.classList.toggle('invalid',!!msg);e.textContent=msg||'';document.getElementById(id==='msg'?'msg':id).setAttribute('aria-invalid',msg?'true':'false')}
+  /* Anfrageformular: mit E-Mail -> Versand über FormSubmit (Mail an dich + automatische Bestätigung an den Kunden) */
+  var form=document.getElementById('form'),res=document.getElementById('result'),resText=document.getElementById('resultText'),resMsg=document.getElementById('resultMsg'),copyBtn=document.getElementById('copyBtn');
+  var $=function(id){return document.getElementById(id)};
+  if(CONTACT.email)form.action='https://formsubmit.co/'+CONTACT.email.trim();
+  function setErr(id,msg){var f=$('f-'+id),e=$('e-'+id);f.classList.toggle('invalid',!!msg);e.textContent=msg||'';$(id).setAttribute('aria-invalid',msg?'true':'false')}
   form.addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var d={name:form.name.value.trim(),company:form.company.value.trim(),email:form.email.value.trim(),phone:form.phone.value.trim(),type:(form.querySelector('input[name="type"]:checked')||{}).value||'',msg:form.msg.value.trim()};
+    var d={name:$('name').value.trim(),company:$('company').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),type:(form.querySelector('input[name="Projekt"]:checked')||{}).value||'',msg:$('msg').value.trim()};
     var ok=true;
     setErr('name',d.name?'':'Bitte geben Sie Ihren Namen an.');if(!d.name)ok=false;
     var em=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);setErr('email',em?'':'Bitte geben Sie eine gültige E-Mail-Adresse an.');if(!em)ok=false;
     setErr('msg',d.msg?'':'Bitte beschreiben Sie kurz Ihr Vorhaben.');if(!d.msg)ok=false;
-    if(!ok){var first=form.querySelector('.invalid input,.invalid textarea');first&&first.focus();return}
-    var text='Website-Anfrage über wolfcode\n\nName: '+d.name+(d.company?'\nBetrieb: '+d.company:'')+'\nE-Mail: '+d.email+(d.phone?'\nTelefon: '+d.phone:'')+'\nProjekt: '+d.type+'\n\nNachricht:\n'+d.msg;
-    resMsg.textContent=text;res.hidden=false;
+    if(!ok){ev.preventDefault();var first=form.querySelector('.invalid input,.invalid textarea');first&&first.focus();return}
     if(CONTACT.email){
-      resText.textContent='Ihr E-Mail-Programm öffnet sich mit der vorbereiteten Anfrage. Falls nicht, kopieren Sie den Text und senden Sie ihn an '+CONTACT.email+'.';
-      window.location.href='mailto:'+CONTACT.email+'?subject='+encodeURIComponent('Website-Anfrage: '+(d.company||d.name))+'&body='+encodeURIComponent(text);
-    }else{
-      resText.textContent='Ihre Anfrage ist vorbereitet. Die direkte Kontaktadresse wird in Kürze ergänzt. Kopieren Sie den Text, damit nichts verloren geht.';
+      $('h-subject').value='Neue Website-Anfrage: '+(d.company||d.name);
+      $('h-next').value=location.href.split('#')[0]+'#danke';
+      var b=form.querySelector('button[type=submit]');b.disabled=true;b.firstChild.textContent='Wird gesendet … ';
+      return; /* normales Absenden an FormSubmit */
     }
+    ev.preventDefault();
+    var text='Website-Anfrage über WolfCode\n\nName: '+d.name+(d.company?'\nBetrieb: '+d.company:'')+'\nE-Mail: '+d.email+(d.phone?'\nTelefon: '+d.phone:'')+'\nProjekt: '+d.type+'\n\nNachricht:\n'+d.msg;
+    resMsg.textContent=text;resMsg.hidden=false;copyBtn.hidden=false;res.hidden=false;
+    resText.textContent='Ihre Anfrage ist vorbereitet. Die direkte Kontaktadresse wird in Kürze ergänzt. Kopieren Sie den Text, damit nichts verloren geht.';
     res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});
   });
-  ['name','email','msg'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){document.getElementById('f-'+id).classList.remove('invalid');document.getElementById('e-'+id).textContent=''})});
+  /* Rückkehr nach erfolgreichem Versand */
+  if(location.hash==='#danke'){
+    res.hidden=false;resMsg.hidden=true;copyBtn.hidden=true;
+    resText.innerHTML='<strong>Vielen Dank, Ihre Anfrage ist angekommen.</strong> Sie erhalten in Kürze eine Bestätigung per E-Mail. Ich melde mich so bald wie möglich persönlich bei Ihnen.';
+    setTimeout(function(){$('kontakt').scrollIntoView({block:'start'})},300);
+  }
+  ['name','email','msg'].forEach(function(id){$(id).addEventListener('input',function(){$('f-'+id).classList.remove('invalid');$('e-'+id).textContent=''})});
   document.getElementById('copyBtn').addEventListener('click',function(){
     var b=this,t=resMsg.textContent;
     function sel(){var r=document.createRange();r.selectNodeContents(resMsg);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Text markiert, bitte kopieren'}
