@@ -354,6 +354,12 @@ h1 span{display:block}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);background:rgba(2,10,24,.85);box-shadow:0 0 0 3px rgba(6,149,254,.22)}
 .field.invalid input,.field.invalid textarea{border-color:var(--error)}
 .err{font-size:13px;color:var(--error);min-height:0}
+.err:empty{display:none}
+.check{display:flex!important;align-items:flex-start;gap:12px;cursor:pointer;font-family:var(--f-body)!important;font-size:14px!important;letter-spacing:0!important;text-transform:none!important;line-height:1.55;color:var(--muted)!important}
+.check input{flex-shrink:0;width:20px;height:20px;margin:1px 0 0;accent-color:var(--blue)}
+.check a{color:var(--blue-hi)}
+.field.invalid .check{color:var(--error)!important}
+.reveal-in{animation:rise .5s var(--ease) both}
 fieldset.field{border:0;margin:0;padding:0}
 .opts{position:relative;display:flex;flex-wrap:wrap;gap:8px}
 .opts input{position:absolute;left:0;top:0;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
@@ -779,7 +785,10 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
               <input type="radio" name="Projekt" id="t4" value="Noch unklar"><label for="t4">Noch unklar</label>
             </div>
           </fieldset>
+          <div class="field full" id="f-url" hidden><label for="url">Ihre bestehende Website <em>*</em></label><input id="url" name="Website" type="url" inputmode="url" autocomplete="url" placeholder="https://www.ihr-betrieb.ch"><span class="err" id="e-url"></span></div>
           <div class="field full" id="f-msg"><label for="msg">Ihre Nachricht <em>*</em></label><textarea id="msg" name="Nachricht" placeholder="Was macht Ihr Betrieb, und was soll die Website können?" required></textarea><span class="err" id="e-msg"></span></div>
+          <div class="field full" id="f-rights" hidden><label class="check" for="rights"><input type="checkbox" id="rights"><span>Ich bestätige, dass ich Inhaber/in der angegebenen Website bin oder vom Inhaber berechtigt bin, sie von WolfCode analysieren und überarbeiten zu lassen. WolfCode darf dafür Inhalte der Website (Texte, Bilder, Logos) für den Entwurf verwenden. <em>*</em></span></label><span class="err" id="e-rights"></span></div>
+          <div class="field full" id="f-agb"><label class="check" for="agb"><input type="checkbox" id="agb"><span>Ich habe die <a href="agb.html" target="_blank" rel="noopener">AGB und Datenschutzhinweise</a> gelesen und akzeptiere sie. <em>*</em></span></label><span class="err" id="e-agb"></span></div>
           <div class="form-foot">
             <p>Felder mit * sind erforderlich. Ihre Angaben werden nur für die Beantwortung Ihrer Anfrage verwendet.</p>
             <button class="btn btn-primary" type="submit">Anfrage senden <span class="ar" aria-hidden="true">→</span></button>
@@ -813,7 +822,7 @@ footer{border-top:1px solid var(--line);padding-block:clamp(48px,6vw,80px) calc(
         <p>Webdesign und Entwicklung für Schweizer Unternehmen, Vereine und lokale Dienstleister.</p>
       </div>
       <div><h4>Seite</h4><ul><li><a href="#leistungen">Leistungen</a></li><li><a href="#referenz">Referenz</a></li><li><a href="#ablauf">Ablauf</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-      <div><h4>Kontakt</h4><ul><li><a href="#kontakt">Anfrage stellen</a></li><li><span style="color:var(--silver-2);font-size:15px">Feuerthalen, Schweiz</span></li></ul></div>
+      <div><h4>Kontakt</h4><ul><li><a href="#kontakt">Anfrage stellen</a></li><li><a href="agb.html">AGB &amp; Datenschutz</a></li><li><span style="color:var(--silver-2);font-size:15px">Feuerthalen, Schweiz</span></li></ul></div>
     </div>
     <svg class="giant" viewBox="0 0 1000 150" aria-hidden="true" preserveAspectRatio="xMidYMid meet"><text x="500" y="128" text-anchor="middle" textLength="992" lengthAdjust="spacingAndGlyphs">WOLFCODE</text></svg>
     <div class="foot-bottom"><span>© <span id="year">2026</span> WolfCode · Jonas Bachmann</span><span>Web | Software | Solutions</span></div>
@@ -903,8 +912,12 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "",
     el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')});
   });
 
+  /* Bei "Redesign": Website-Adresse und Berechtigung abfragen */
+  function isRedesign(){var c=document.querySelector('input[name="Projekt"]:checked');return !!c&&c.value==='Redesign'}
+  function updateType(){var on=isRedesign();['f-url','f-rights'].forEach(function(id){var el=document.getElementById(id);if(el.hidden===on){el.hidden=!on;if(on){el.classList.remove('reveal-in');void el.offsetWidth;el.classList.add('reveal-in')}}})}
+  [].forEach.call(document.querySelectorAll('input[name="Projekt"]'),function(r){r.addEventListener('change',updateType)});
   /* Projekttyp aus CTA übernehmen */
-  [].forEach.call(document.querySelectorAll('[data-project]'),function(a){a.addEventListener('click',function(){var v=a.getAttribute('data-project');[].forEach.call(document.querySelectorAll('input[name="Projekt"]'),function(r){r.checked=r.value===v})})});
+  [].forEach.call(document.querySelectorAll('[data-project]'),function(a){a.addEventListener('click',function(){var v=a.getAttribute('data-project');[].forEach.call(document.querySelectorAll('input[name="Projekt"]'),function(r){r.checked=r.value===v});updateType()})});
 
   /* Direkte Kontaktangaben einblenden, falls hinterlegt */
   var direct=document.getElementById('direct');
@@ -923,6 +936,14 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "",
     setErr('name',d.name?'':'Bitte geben Sie Ihren Namen an.');if(!d.name)ok=false;
     var em=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email);setErr('email',em?'':'Bitte geben Sie eine gültige E-Mail-Adresse an.');if(!em)ok=false;
     setErr('msg',d.msg?'':'Bitte beschreiben Sie kurz Ihr Vorhaben.');if(!d.msg)ok=false;
+    d.redesign=isRedesign();d.url='';
+    if(d.redesign){
+      var u=$('url').value.trim();if(u&&!/^https?:\/\//i.test(u))u='https://'+u;
+      var uok=/^https?:\/\/[^\s.\/]+\.[^\s]{2,}$/i.test(u);d.url=uok?u:'';
+      setErr('url',uok?'':'Bitte geben Sie die Adresse Ihrer bestehenden Website an.');if(!uok)ok=false;
+      setErr('rights',$('rights').checked?'':'Für ein Redesign benötigen wir Ihre Bestätigung.');if(!$('rights').checked)ok=false;
+    }else{setErr('url','');setErr('rights','')}
+    setErr('agb',$('agb').checked?'':'Bitte akzeptieren Sie die AGB und Datenschutzhinweise.');if(!$('agb').checked)ok=false;
     if(!ok){ev.preventDefault();var first=form.querySelector('.invalid input,.invalid textarea');first&&first.focus();return}
     if(CONTACT.endpoint){
       ev.preventDefault();
@@ -932,9 +953,9 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "",
       var fail=function(m){restore();resMsg.hidden=true;copyBtn.hidden=true;res.hidden=false;
         resText.textContent=m||('Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es nochmals oder schreiben Sie direkt an '+CONTACT.email+'.');
         res.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})};
-      fetch(CONTACT.endpoint,{method:'POST',body:JSON.stringify({name:d.name,company:d.company,email:d.email,phone:d.phone,type:d.type,message:d.msg,website:$('hp').value})})
+      fetch(CONTACT.endpoint,{method:'POST',body:JSON.stringify({name:d.name,company:d.company,email:d.email,phone:d.phone,type:d.type,message:d.msg,url:d.url,rightsConfirmed:!!d.redesign,agbAccepted:true,agbVersion:'2026-10',page:location.href.split('#')[0],hp:$('hp').value})})
         .then(function(x){return x.json()})
-        .then(function(j){if(j&&j.ok){restore();form.reset();showThanks()}else fail(j&&j.error==='invalid'?'Bitte prüfen Sie Ihre Angaben.':null)})
+        .then(function(j){if(j&&j.ok){restore();form.reset();updateType();showThanks()}else fail(j&&j.error==='invalid'?'Bitte prüfen Sie Ihre Angaben.':null)})
         .catch(function(){fail()});
       return;
     }
@@ -961,7 +982,8 @@ var CONTACT = { email: "info@wolfcodeweb.com", phone: "", formId: "",
   $('thanksClose').addEventListener('click',closeThanks);
   th.addEventListener('click',function(e){if(e.target===th)closeThanks()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!th.hidden)closeThanks()});
-  ['name','email','msg'].forEach(function(id){$(id).addEventListener('input',function(){$('f-'+id).classList.remove('invalid');$('e-'+id).textContent=''})});
+  ['name','email','msg','url'].forEach(function(id){$(id).addEventListener('input',function(){$('f-'+id).classList.remove('invalid');$('e-'+id).textContent=''})});
+  ['rights','agb'].forEach(function(id){$(id).addEventListener('change',function(){$('f-'+id).classList.remove('invalid');$('e-'+id).textContent=''})});
   document.getElementById('copyBtn').addEventListener('click',function(){
     var b=this,t=resMsg.textContent;
     function sel(){var r=document.createRange();r.selectNodeContents(resMsg);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Text markiert, bitte kopieren'}
